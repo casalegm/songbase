@@ -15,4 +15,4 @@ def show_all_users():
     return'<h2>this is the page for all users</h2>'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
