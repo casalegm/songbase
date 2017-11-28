@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}
+  All Artists
+{% endblock %}
+{% block page_content%}
+    <h1>This page edits artists</h1>
+    <form action="/artist/edit/{{artist.id}}" method="post">
+      Artist's Name <br>
+      <input type="text" name="name" value="{{artist.name}}"> <br> <br>
+      Artist's Description <br>
+      <input type="text" name="about" value="{{artist.about}}"> <br> <br>
+      <input type="submit" name="" value="Edit Artist">
+    </form>
+{% endblock %}
