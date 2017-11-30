@@ -15,7 +15,7 @@ class Artist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     about = db.Column(db.Text)
-    songs = db.relationship('Song', backref='artist') #links the 2 tables
+    songs = db.relationship('Song', backref='artist', cascade='delete') #links the 2 tables
 
 
 class Song(db.Model):
@@ -64,6 +64,19 @@ def edit_artist(id):
         db.session.commit()
         return redirect(url_for('show_all_artists'))
 
+@app.route('/artist/delete/<int:id>', methods=['GET', 'POST'])
+def delete_artist(id):
+    artist = Artist.query.filter_by(id=id).first()
+    if request.method == 'GET':
+        return render_template('artist-delete.html', artist=artist)
+    if request.method == 'POST':
+        # update data based on the form data
+        artist.name = request.form['name']
+        artist.about = request.form['about']
+        # update the database
+        db.session.commit()
+        return redirect(url_for('show_all_artists'))
+
 # song-all.html adds song id to the edit button using a hidden input
 @app.route('/songs')
 def show_all_songs():
@@ -72,8 +85,9 @@ def show_all_songs():
 
 @app.route('/song/add', methods=['GET', 'POST'])
 def add_songs():
+    artists = Artist.query.all()
     if request.method == 'GET':
-        return render_template('song-add.html')
+        return render_template('song-add.html', artists=artists)
     if request.method == 'POST':
         # get data from the form
         name = request.form['name']
